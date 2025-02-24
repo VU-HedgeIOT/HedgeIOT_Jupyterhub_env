@@ -1,3 +1,4 @@
+# JupyterHub
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 services:
@@ -22,7 +23,7 @@ services:
     image: ghcr.io/tno/knowledge-engine/smart-connector:1.2.5
     container_name: knowledge-engine-jh
     ports:
-      - "8280:8280"
+      - "8281:8280"
     environment:
       KE_RUNTIME_PORT: 8082
       KE_RUNTIME_EXPOSED_URL: https://www.hedge-iot.labs.vu.nl/knowledge-engine-inter-ker
