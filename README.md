@@ -26,3 +26,9 @@ Inside /work there is also /shared_data. This read-only folder is accessible to 
 You can copy these files into your /work directory to save and edit.
 
 While in /shared_data, you may also clone [BScP_NBs](https://github.com/matercomus/BScP_NBs) which is a set of notebooks that demonstrates how to use jupyter notebooks and the Knowledge Engine to create solutions for Heterogeneous IoT data and IoT interoperability.
+
+## TODO
+
+1. Secure graphDB
+1. Add github cli to user containers.
+1. Fix KE connection to the HedgeIOT KD.

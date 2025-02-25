@@ -17,6 +17,7 @@ RUN apt-get update --yes && \
     apt-get install --yes --no-install-recommends \
     # Common useful utilities
     git \
+    gh \
     nano-tiny \
     tzdata \
     unzip \
