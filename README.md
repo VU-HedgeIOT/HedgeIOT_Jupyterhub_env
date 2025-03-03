@@ -41,4 +41,4 @@ DOCKER_BUILDKIT=0 docker compose build jh
 docker compose up -d
 ```
 
-While in /shared_data, you may also clone [BScP_NBs](https://github.com/matercomus/BScP_NBs) which is a set of notebooks that demonstrates how to use jupyter notebooks and the Knowledge Engine to create solutions for Heterogeneous IoT data and IoT interoperability.
+While in /shared_data, you may also clone [HegdeIOT_Jupyterhub_NBs](https://github.com/VU-HedgeIOT/HegdeIOT_Jupyterhub_NBs) which is a set of notebooks that demonstrates how to use jupyter notebooks and the Knowledge Engine to create solutions for Heterogeneous IoT data and IoT interoperability.
