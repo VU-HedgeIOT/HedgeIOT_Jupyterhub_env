@@ -12,22 +12,23 @@ services:
       - "./public:/usr/share/nginx/html/public"
     restart: on-failure
     networks:
-      - hedge-iot-network
+      - hedge-iot-network-jupyterhub
     depends_on:
       knowledge-engine:
         condition: service_healthy
     
   knowledge-engine:
-    image: ghcr.io/tno/knowledge-engine/smart-connector:1.2.5
+    image: ghcr.io/tno/knowledge-engine/smart-connector:1.3.0
     container_name: knowledge-engine-jh
     networks:
-      - hedge-iot-network
-    ports:
-      - "8281:8280"
+      - hedge-iot-network-jupyterhub
+    # ports:
+    #   - "8281:8280"
+    #   - "8081:8081"
     environment:
-      KE_RUNTIME_PORT: 8082
-      KE_RUNTIME_EXPOSED_URL: https://jupyterhub.hedge-iot.labs.vu.nl/knowledge-engine-inter-ker
-      KD_URL: https://${KE_USER}:${KE_PASS}@hedgeiot.knowledge-engine.eu/kd
+      - KE_RUNTIME_PORT=8081
+      - KE_RUNTIME_EXPOSED_URL=https://jupyterhub.hedge-iot.labs.vu.nl/knowledge-engine-inter-ker
+      - KD_URL=https://${KE_USER}:${KE_PASS}@hedgeiot.knowledge-engine.eu/kd
     restart: on-failure
     healthcheck:
       test: ["CMD", "ping", "-c", "1", "localhost"]
@@ -46,7 +47,7 @@ services:
     image: jupyterhub
     container_name: jupyterhub
     networks:
-      - hedge-iot-network
+      - hedge-iot-network-jupyterhub
     volumes:
       # The JupyterHub configuration file
       - "./jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py:ro"
@@ -62,7 +63,7 @@ services:
       # This username will be a JupyterHub admin
       JUPYTERHUB_ADMIN: admin
       # All containers will join this network
-      DOCKER_NETWORK_NAME: hedge-iot-network
+      DOCKER_NETWORK_NAME: hedge-iot-network-jupyterhub
       # JupyterHub will spawn this Notebook image for users
       DOCKER_NOTEBOOK_IMAGE: matercomus/jupyterlab3:3
       # Notebook directory inside user image
@@ -83,7 +84,7 @@ services:
     ports:
       - "7200:7200"
     networks:
-      - hedge-iot-network
+      - hedge-iot-network-jupyterhub
     environment:
       graphdb.external-url: https://jupyterhub.hedge-iot.labs.vu.nl/graphdb/
 
@@ -94,5 +95,5 @@ volumes:
 
 
 networks:
-  hedge-iot-network:
-    external: true
+  hedge-iot-network-jupyterhub:
+    name: hedge-iot-network-jupyterhub
