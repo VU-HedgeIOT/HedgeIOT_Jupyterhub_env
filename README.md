@@ -42,3 +42,15 @@ docker compose up -d
 ```
 
 While in /shared_data, you may also clone [HegdeIOT_Jupyterhub_NBs](https://github.com/VU-HedgeIOT/HegdeIOT_Jupyterhub_NBs) which is a set of notebooks that demonstrates how to use jupyter notebooks and the Knowledge Engine to create solutions for Heterogeneous IoT data and IoT interoperability.
+
+## Connecting to Knowledge Engine
+
+(We assume a KE instance is running where you setup or know the login credentials)
+Create a .env file with the following content:
+
+```bash
+HOST_IP=
+KE_URL=http://${HOST_IP}/knowledge-engine/rest
+KE_USER=
+KE_PASS=
+```
