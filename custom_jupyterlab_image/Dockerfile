@@ -1,7 +1,7 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG OWNER=jupyter
-ARG BASE_CONTAINER=$OWNER/base-notebook:lab-4.4.6
+ARG OWNER=quay.io/jupyter
+ARG BASE_CONTAINER=$OWNER/base-notebook:latest
 FROM $BASE_CONTAINER
 
 LABEL maintainer="Mateusz Kedzia <mateusz.kedzia@gmail.com>"
