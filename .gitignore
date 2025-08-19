@@ -1,3 +1,4 @@
 .env
 .idea
 shared_data
+.cursor/

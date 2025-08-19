@@ -1,11 +1,15 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
+
 ARG JUPYTERHUB_VERSION
 FROM jupyterhub/jupyterhub:$JUPYTERHUB_VERSION
 
-# Install dockerspawner, nativeauthenticator
-RUN python3 -m pip install --no-cache-dir \
-        dockerspawner==12.* \
-        jupyterhub-nativeauthenticator==1.*
+# Install uv instead of pip
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+
+# Use uv for package installation
+RUN uv pip install --no-cache-dir \
+        dockerspawner \
+        jupyterhub-nativeauthenticator
 
 CMD ["jupyterhub", "-f", "/srv/jupyterhub/jupyterhub_config.py"]
