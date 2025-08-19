@@ -1,0 +1,14 @@
+ipywidgets
+jupyterlab-code-formatter
+black
+isort
+fastapi
+matplotlib
+pandas
+pydantic
+rdflib
+requests
+seaborn
+SPARQLWrapper
+uvicorn
+jupyterlab-git
