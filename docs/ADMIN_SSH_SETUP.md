@@ -70,7 +70,7 @@ ssh jupyterlab-admin
 
 1. **Remote-SSH: Connect to Host**
 2. **Select**: `jupyterlab-admin`
-3. **Working directory**: `/home/jovyan/project`
+3. **Working directory**: `/home/jovyan/work`
 
 ## Features
 
@@ -85,16 +85,17 @@ ssh jupyterlab-admin
 
 ```
 /home/jovyan/
-├── project/        # Direct mount of entire project
-├── work/           # Standard JupyterHub workspace
-└── shared_data/    # Shared data from host
+├── work/           # Notebook workspace (persistent)
+│   └── shared_data/    # Shared data from host (read-only)
+└── .ssh/           # SSH configuration (auto-mounted)
 ```
 
 ## Terminal Commands
 
 In the admin container terminal:
-- `ssh-info` - Show SSH connection details again
-- `project` - Go to project directory
+- `ssh-info` - Show SSH connection details again  
+- `notebooks` - Go to notebook workspace (/home/jovyan/work)
+- `shared` - Go to shared data directory
 - Standard commands: `sudo`, `uv`, `pytest`, etc.
 
 ## Notes
