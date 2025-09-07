@@ -10,6 +10,14 @@ services:
     # This service just builds the image, doesn't run
     profiles: ["build-only"]
 
+  custom-jupyterlab-admin:
+    build:
+      context: ./custom_jupyterlab_image
+      dockerfile: Dockerfile.admin
+    image: custom-jupyterlab-admin:latest
+    # This service just builds the admin image, doesn't run
+    profiles: ["build-only"]
+
   nginx:
     image: nginx:latest
     container_name: nginx-jh

@@ -1,0 +1,71 @@
+# Admin container bash profile
+# Automatically shows SSH connection info when terminal opens
+
+# Source the default profile first
+if [ -f ~/.bashrc ]; then
+    source ~/.bashrc
+fi
+
+# Function to show SSH connection info
+show_ssh_info() {
+    echo ""
+    echo "🔐 SSH Connection Setup for Your Local Machine"
+    echo "=============================================" 
+    echo "📂 SSH keys auto-generated and ready!"
+    echo ""
+    
+    # Get container info
+    CONTAINER_ID=$(hostname)
+    CONTAINER_IP=$(hostname -I | awk '{print $1}')
+    
+    echo "📍 Container: $CONTAINER_ID"
+    echo "🌐 Internal IP: $CONTAINER_IP"
+    echo ""
+    
+    echo "🔧 SETUP STEPS:"
+    echo "1️⃣ Download SSH keys from JupyterLab file browser:"
+    echo "   📁 /home/jovyan/work/ssh_private_key"
+    echo "   📁 /home/jovyan/work/ssh_public_key"
+    echo ""
+    echo "2️⃣ On your local machine, copy keys:"
+    echo "   cp ~/Downloads/ssh_private_key ~/.ssh/jupyterlab-admin"
+    echo "   cp ~/Downloads/ssh_public_key ~/.ssh/jupyterlab-admin.pub"
+    echo "   chmod 600 ~/.ssh/jupyterlab-admin"
+    echo ""
+    echo "3️⃣ Add SSH config to ~/.ssh/config:"
+    echo "   Host jupyterlab-admin"
+    echo "       HostName $CONTAINER_IP"
+    echo "       Port 22"
+    echo "       User jovyan"
+    echo "       IdentityFile ~/.ssh/jupyterlab-admin"
+    echo "       # ProxyCommand ssh -W $CONTAINER_IP:22 YOUR_JUMPHOST  # Uncomment if using jump host"
+    echo "       StrictHostKeyChecking no"
+    echo "       UserKnownHostsFile /dev/null"
+    echo ""
+    echo "   💡 If connecting through a jump host, uncomment ProxyCommand line"
+    echo "      and replace YOUR_JUMPHOST with your server hostname"
+    echo ""
+    echo "4️⃣ Connect:"
+    echo "   ssh jupyterlab-admin"
+    echo ""
+    echo "🎯 For Cursor IDE: Remote-SSH → jupyterlab-admin"
+    echo "   Working directory: /home/jovyan/work"
+}
+
+# Only show SSH info if this is an interactive shell and we haven't shown it yet
+if [[ $- == *i* ]] && [[ -z "$SSH_INFO_SHOWN" ]]; then
+    show_ssh_info
+    export SSH_INFO_SHOWN=1
+fi
+
+# Add some useful aliases for admin
+alias ll='ls -la'
+alias la='ls -la'
+alias ssh-info='show_ssh_info'
+alias shared='cd /home/jovyan/work/shared_data'
+alias notebooks='cd /home/jovyan/work'
+
+# Set nice prompt
+export PS1='\[\033[01;32m\]admin@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+echo "💡 Tip: Type 'ssh-info' to show SSH connection details again"
