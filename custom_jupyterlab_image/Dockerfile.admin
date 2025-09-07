@@ -115,5 +115,6 @@ EXPOSE 22
 # Expose Jupyter port  
 EXPOSE 8888
 
-# Use custom startup script (SSH + JupyterHub)
-CMD ["/usr/local/bin/start-admin.sh", "start-singleuser.sh"]
+# Use ENTRYPOINT to ensure our script always runs
+ENTRYPOINT ["/usr/local/bin/start-admin.sh"]
+CMD ["start-singleuser.sh"]
