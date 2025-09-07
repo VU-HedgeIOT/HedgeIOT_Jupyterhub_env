@@ -77,7 +77,7 @@ ssh jupyterlab-admin
 - ✅ **Auto-spawn** admin image for admin users
 - ✅ **SSH server** with key-based authentication
 - ✅ **Sudo access** for system administration  
-- ✅ **Project directory** mounted at `/home/jovyan/project`
+- ✅ **Notebook workspace** with shared data access
 - ✅ **Enhanced dev tools** (pytest, pylint, uv, etc.)
 - ✅ **Auto-display** SSH connection info in terminal
 
