@@ -14,6 +14,12 @@ c = get_config()
 # Spawn containers from this image
 c.DockerSpawner.image = os.environ["DOCKER_NOTEBOOK_IMAGE"]
 
+# Allow both regular and admin images
+c.DockerSpawner.allowed_images = {
+    'default': os.environ["DOCKER_NOTEBOOK_IMAGE"],
+    'admin': 'custom-jupyterlab-admin:latest'
+}
+
 # JupyterHub requires a single-user instance of the Notebook server, so we
 # default to using the `start-singleuser.sh` script included in the
 # jupyter/docker-stacks *-notebook images as the Docker run command when
@@ -47,6 +53,23 @@ class MyDockerSpawner(DockerSpawner):
             "mode": "ro",
         }
         self.volumes['jupyterhub-user-{username}'] = {'bind': '/home/jovyan/work', 'mode': 'rw'}
+        
+        # Use admin image for admin users
+        if self.user.name in self.authenticator.admin_users:
+            self.log.info(f"Admin user {self.user.name} detected, using admin image")
+            image = "custom-jupyterlab-admin:latest"
+            # Mount project directory for admin users
+            self.volumes[cwd] = {
+                "bind": "/home/jovyan/project",
+                "mode": "rw"
+            }
+            # Admin gets SSH access, so expose SSH port
+            if not hasattr(self, 'port_map'):
+                self.port_map = {}
+            # Note: SSH port 22 will be dynamically assigned by Docker
+            self.extra_create_kwargs = extra_create_kwargs or {}
+            self.extra_create_kwargs.setdefault('ports', {}).update({'22/tcp': None})
+        
         return super().start(
             image=image,
             extra_create_kwargs=extra_create_kwargs,
