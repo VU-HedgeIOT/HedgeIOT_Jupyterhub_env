@@ -10,30 +10,13 @@ services:
     # This service just builds the image, doesn't run
     profiles: ["build-only"]
 
-  jupyterlab-admin:
+  custom-jupyterlab-admin:
     build:
       context: ./custom_jupyterlab_image
       dockerfile: Dockerfile.admin
     image: custom-jupyterlab-admin:latest
-    container_name: jupyterlab-admin
-    restart: unless-stopped
-    networks:
-      - hedge-iot-network-jupyterhub
-    ports:
-      - "2222:22"      # SSH access for remote development
-    volumes:
-      # SSH keys and config
-      - "./.ssh/authorized_keys:/home/jovyan/.ssh/authorized_keys:ro"
-      # Persistent workspace for admin
-      - "admin-workspace:/home/jovyan/work"
-      # Shared data access
-      - "./shared_data:/home/jovyan/shared_data:rw"
-      # Direct project access for development
-      - ".:/home/jovyan/project:rw"
-    environment:
-      - GRANT_SUDO=yes
-    # Only start when explicitly requested
-    profiles: ["admin"]
+    # This service just builds the admin image, doesn't run
+    profiles: ["build-only"]
 
   nginx:
     image: nginx:latest
@@ -125,7 +108,6 @@ services:
 volumes:
   jupyterhub-data:
   graphdb-data:
-  admin-workspace:
 
 
 networks:

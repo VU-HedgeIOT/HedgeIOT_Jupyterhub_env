@@ -88,6 +88,9 @@ USER ${NB_UID}
 # Copy requirements file for better Docker layer caching
 COPY --chown=${NB_UID}:${NB_GID} requirements.txt .
 
+# Copy custom bash profile that shows SSH info
+COPY --chown=${NB_UID}:${NB_GID} bash_profile_admin /home/${NB_USER}/.bash_profile
+
 # Install python packages using uv (will use system Python due to ENV var)
 RUN uv pip install -r requirements.txt
 
