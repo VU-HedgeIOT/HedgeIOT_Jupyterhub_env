@@ -37,9 +37,20 @@ Make sure Docker and Docker Compose are installed.
 git clone https://github.com/matercomus/BScP_jupyterhub_env
 cd BScP_jupyterhub_env
 export PWD=$(pwd)
+# Build the custom JupyterLab image first
+docker compose --profile build-only build custom-jupyterlab
 DOCKER_BUILDKIT=0 docker compose build jh
 docker compose up -d
 ```
+
+### Troubleshooting
+
+If users cannot spawn containers with "ImageNotFound" error for `custom-jupyterlab`:
+
+1. Build the custom image: `docker compose --profile build-only build custom-jupyterlab`
+2. Restart JupyterHub: `docker compose restart jh`
+
+The `pull_policy = "ifnotpresent"` configuration prevents unnecessary image pulls when the image exists locally.
 
 While in /shared_data, you may also clone [HegdeIOT_Jupyterhub_NBs](https://github.com/VU-HedgeIOT/HegdeIOT_Jupyterhub_NBs) which is a set of notebooks that demonstrates how to use jupyter notebooks and the Knowledge Engine to create solutions for Heterogeneous IoT data and IoT interoperability.
 

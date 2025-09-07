@@ -36,7 +36,7 @@ c.DockerSpawner.notebook_dir = notebook_dir
 
 
 class MyDockerSpawner(DockerSpawner):
-    def start(self, image=None, extra_create_kwargs=None, extra_host_config=None):
+    def start(self):
         # Get the current working directory
         cwd = os.environ.get("JUPYTERHUB_CWD")
         # Construct the absolute path to the desired directory
@@ -47,11 +47,7 @@ class MyDockerSpawner(DockerSpawner):
             "mode": "ro",
         }
         self.volumes['jupyterhub-user-{username}'] = {'bind': '/home/jovyan/work', 'mode': 'rw'}
-        return super().start(
-            image=image,
-            extra_create_kwargs=extra_create_kwargs,
-            extra_host_config=extra_host_config,
-        )
+        return super().start()
 # Increase time to spawn
 c.Spawner.http_timeout = int(60)
 # Spawn single-user servers as Docker containers
@@ -61,6 +57,9 @@ c.DockerSpawner.remove = False
 
 # For debugging arguments passed to spawned containers
 c.DockerSpawner.debug = True
+
+# Set pull policy to only pull if image is not present locally
+c.DockerSpawner.pull_policy = "ifnotpresent"
 
 # User containers will access hub by container name on the Docker network
 c.JupyterHub.hub_ip = "jh"
