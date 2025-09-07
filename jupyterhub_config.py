@@ -58,13 +58,7 @@ class MyDockerSpawner(DockerSpawner):
         if self.user.name in self.authenticator.admin_users:
             self.log.info(f"Admin user {self.user.name} detected, using admin image")
             image = "custom-jupyterlab-admin:latest"
-            # Mount SSH authorized_keys for admin users
-            ssh_keys_path = os.path.join(cwd, ".ssh", "authorized_keys")
-            if os.path.exists(ssh_keys_path):
-                self.volumes[ssh_keys_path] = {
-                    "bind": "/home/jovyan/.ssh/authorized_keys",
-                    "mode": "ro"
-                }
+            # SSH keys are auto-generated inside the admin container
             # Admin gets SSH access, so expose SSH port
             self.extra_create_kwargs = extra_create_kwargs or {}
             self.extra_create_kwargs.setdefault('ports', {}).update({'22/tcp': None})

@@ -79,7 +79,7 @@ RUN mkdir -p /home/${NB_USER}/.ssh && \
 RUN update-alternatives --install /usr/bin/nano nano /bin/nano-tiny 10
 
 # Create startup script for SSH + JupyterHub
-RUN printf '#!/bin/bash\nset -e\n\n# Start SSH daemon (run as root)\necho "Starting SSH daemon..."\nsudo /usr/sbin/sshd\n\n# Start JupyterHub single-user server\necho "Starting JupyterHub single-user server..."\nexec "$@"\n' > /usr/local/bin/start-admin.sh && \
+RUN printf '#!/bin/bash\nset -e\n\n# Generate SSH keys if they dont exist\nif [ ! -f /home/jovyan/.ssh/id_ed25519 ]; then\n    echo "Generating SSH keys..."\n    ssh-keygen -t ed25519 -f /home/jovyan/.ssh/id_ed25519 -N "" -q\n    cat /home/jovyan/.ssh/id_ed25519.pub > /home/jovyan/.ssh/authorized_keys\n    chmod 600 /home/jovyan/.ssh/authorized_keys\n    # Save keys to work directory for easy access\n    cp /home/jovyan/.ssh/id_ed25519 /home/jovyan/work/ssh_private_key\n    cp /home/jovyan/.ssh/id_ed25519.pub /home/jovyan/work/ssh_public_key\n    echo "SSH keys generated and saved to work directory"\nfi\n\n# Start SSH daemon (run as root)\necho "Starting SSH daemon..."\nsudo /usr/sbin/sshd\n\n# Start JupyterHub single-user server\necho "Starting JupyterHub single-user server..."\nexec "$@"\n' > /usr/local/bin/start-admin.sh && \
     chmod +x /usr/local/bin/start-admin.sh
 
 # Switch back to jovyan to avoid accidental container runs as root

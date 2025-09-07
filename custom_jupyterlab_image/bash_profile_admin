@@ -11,6 +11,15 @@ show_ssh_info() {
     echo ""
     echo "🔐 SSH Connection Info for Your Local Machine"
     echo "============================================="
+    echo "📂 SSH keys are auto-generated and saved in your work directory!"
+    echo ""
+    
+    # Show SSH key files in work directory
+    if [ -f /home/jovyan/work/ssh_private_key ]; then
+        echo "🔑 Private key: /home/jovyan/work/ssh_private_key" 
+        echo "🔓 Public key:  /home/jovyan/work/ssh_public_key"
+        echo ""
+    fi
     
     # Get container info
     CONTAINER_ID=$(hostname)
