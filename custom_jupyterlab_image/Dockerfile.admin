@@ -78,8 +78,8 @@ RUN mkdir -p /home/${NB_USER}/.ssh && \
 # Create alternative for nano -> nano-tiny
 RUN update-alternatives --install /usr/bin/nano nano /bin/nano-tiny 10
 
-# Create startup script for SSH only
-RUN printf '#!/bin/bash\nset -e\n\n# Start SSH daemon (run as root)\necho "Starting SSH daemon for remote development..."\nsudo /usr/sbin/sshd\n\n# Keep container running\necho "SSH server ready. Container will stay alive for remote development."\ntail -f /dev/null\n' > /usr/local/bin/start-admin.sh && \
+# Create startup script for SSH + JupyterHub
+RUN printf '#!/bin/bash\nset -e\n\n# Start SSH daemon (run as root)\necho "Starting SSH daemon..."\nsudo /usr/sbin/sshd\n\n# Start JupyterHub single-user server\necho "Starting JupyterHub single-user server..."\nexec "$@"\n' > /usr/local/bin/start-admin.sh && \
     chmod +x /usr/local/bin/start-admin.sh
 
 # Switch back to jovyan to avoid accidental container runs as root
@@ -112,5 +112,5 @@ EXPOSE 22
 # Expose Jupyter port  
 EXPOSE 8888
 
-# Use custom startup script (SSH only)
-CMD ["/usr/local/bin/start-admin.sh"]
+# Use custom startup script (SSH + JupyterHub)
+CMD ["/usr/local/bin/start-admin.sh", "start-singleuser.sh"]
