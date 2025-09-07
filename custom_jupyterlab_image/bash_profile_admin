@@ -65,8 +65,8 @@ EOF
     
     echo "---------------------------------------------------"
     echo ""
-    echo "🔑 Get SSH private key from hub host:"
-    echo "   cat .ssh/jupyterlab-admin"
+    echo "🔑 Get SSH private key from this container:"
+    echo "   cat /home/jovyan/work/ssh_private_key"
     echo ""
     echo "🚀 Then connect from your laptop:"
     echo "   ssh jupyterlab-admin"
