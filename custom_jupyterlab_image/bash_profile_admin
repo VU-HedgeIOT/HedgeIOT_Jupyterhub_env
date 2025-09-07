@@ -9,71 +9,44 @@ fi
 # Function to show SSH connection info
 show_ssh_info() {
     echo ""
-    echo "🔐 SSH Connection Info for Your Local Machine"
-    echo "============================================="
-    echo "📂 SSH keys are auto-generated and saved in your work directory!"
+    echo "🔐 SSH Connection Setup for Your Local Machine"
+    echo "=============================================" 
+    echo "📂 SSH keys auto-generated and ready!"
     echo ""
-    
-    # Show SSH key files in work directory
-    if [ -f /home/jovyan/work/ssh_private_key ]; then
-        echo "🔑 Private key: /home/jovyan/work/ssh_private_key" 
-        echo "🔓 Public key:  /home/jovyan/work/ssh_public_key"
-        echo ""
-    fi
     
     # Get container info
     CONTAINER_ID=$(hostname)
     CONTAINER_IP=$(hostname -I | awk '{print $1}')
     
-    # Check for external port mapping
-    PORT_MAPPING=$(docker port $CONTAINER_ID 22/tcp 2>/dev/null || echo "none")
-    
     echo "📍 Container: $CONTAINER_ID"
     echo "🌐 Internal IP: $CONTAINER_IP"
-    
-    # Show SSH config based on available connection method
     echo ""
-    echo "📝 Add this to ~/.ssh/config on your LOCAL machine:"
-    echo "---------------------------------------------------"
     
-    if [[ "$PORT_MAPPING" != "none" && "$PORT_MAPPING" == *":"* ]]; then
-        # External port available
-        EXTERNAL_PORT=$(echo $PORT_MAPPING | cut -d: -f2)
-        cat << EOF
-Host jupyterlab-admin
-    HostName hedgeiot
-    Port $EXTERNAL_PORT
-    User jovyan
-    IdentityFile ~/.ssh/jupyterlab-admin
-    ProxyCommand ssh -W localhost:$EXTERNAL_PORT hedgeiot
-    StrictHostKeyChecking no
-    UserKnownHostsFile /dev/null
-EOF
-    else
-        # Use internal IP
-        cat << EOF
-Host jupyterlab-admin
-    HostName $CONTAINER_IP
-    Port 22
-    User jovyan
-    IdentityFile ~/.ssh/jupyterlab-admin
-    ProxyCommand ssh -W $CONTAINER_IP:22 hedgeiot
-    StrictHostKeyChecking no
-    UserKnownHostsFile /dev/null
-EOF
-    fi
-    
-    echo "---------------------------------------------------"
+    echo "🔧 SETUP STEPS:"
+    echo "1️⃣ Download SSH keys from JupyterLab file browser:"
+    echo "   📁 /home/jovyan/work/ssh_private_key"
+    echo "   📁 /home/jovyan/work/ssh_public_key"
     echo ""
-    echo "🔑 Get SSH private key from this container:"
-    echo "   cat /home/jovyan/work/ssh_private_key"
+    echo "2️⃣ On your local machine, copy keys:"
+    echo "   cp ~/Downloads/ssh_private_key ~/.ssh/jupyterlab-admin"
+    echo "   cp ~/Downloads/ssh_public_key ~/.ssh/jupyterlab-admin.pub"
+    echo "   chmod 600 ~/.ssh/jupyterlab-admin"
     echo ""
-    echo "🚀 Then connect from your laptop:"
+    echo "3️⃣ Add SSH config to ~/.ssh/config:"
+    echo "   Host jupyterlab-admin"
+    echo "       HostName $CONTAINER_IP"
+    echo "       Port 22"
+    echo "       User jovyan"
+    echo "       IdentityFile ~/.ssh/jupyterlab-admin"
+    echo "       ProxyCommand ssh -W $CONTAINER_IP:22 hedgeiot"
+    echo "       StrictHostKeyChecking no"
+    echo "       UserKnownHostsFile /dev/null"
+    echo ""
+    echo "4️⃣ Connect:"
     echo "   ssh jupyterlab-admin"
     echo ""
     echo "🎯 For Cursor IDE: Remote-SSH → jupyterlab-admin"
     echo "   Working directory: /home/jovyan/work"
-    echo ""
 }
 
 # Only show SSH info if this is an interactive shell and we haven't shown it yet
