@@ -63,10 +63,14 @@ class MyDockerSpawner(DockerSpawner):
                 "bind": "/home/jovyan/project",
                 "mode": "rw"
             }
+            # Mount SSH authorized_keys for admin users
+            ssh_keys_path = os.path.join(cwd, ".ssh", "authorized_keys")
+            if os.path.exists(ssh_keys_path):
+                self.volumes[ssh_keys_path] = {
+                    "bind": "/home/jovyan/.ssh/authorized_keys",
+                    "mode": "ro"
+                }
             # Admin gets SSH access, so expose SSH port
-            if not hasattr(self, 'port_map'):
-                self.port_map = {}
-            # Note: SSH port 22 will be dynamically assigned by Docker
             self.extra_create_kwargs = extra_create_kwargs or {}
             self.extra_create_kwargs.setdefault('ports', {}).update({'22/tcp': None})
         

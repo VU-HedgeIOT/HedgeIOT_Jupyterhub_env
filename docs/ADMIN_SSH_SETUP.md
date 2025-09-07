@@ -48,38 +48,43 @@ ssh -i .ssh/jupyterlab-admin -p 2222 jovyan@localhost
 
 ## Remote Development Setup
 
-### Cursor IDE
+### Direct SSH Connection from Local Machine
 
-1. **Install Cursor** if not already installed
-2. **Connect to Remote Host**:
-   - Open Cursor
-   - Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
-   - Type "Remote-SSH: Connect to Host"
-   - Enter: `jovyan@localhost:2222`
-   - Select the SSH key: `.ssh/jupyterlab-admin`
+Add this to your **local machine's** `~/.ssh/config`:
 
-3. **Configure SSH in Cursor**:
-   ```json
-   // In Cursor settings.json
-   {
-     "remote.SSH.configFile": "/path/to/your/project/.ssh/config"
-   }
-   ```
+```ssh-config
+# Direct connection to admin container (single command)
+Host jupyterlab-admin
+    HostName localhost
+    Port 2222
+    User jovyan
+    IdentityFile ~/.ssh/jupyterlab-admin
+    ProxyCommand ssh -W localhost:2222 hedgeiot
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+```
 
-### VS Code Remote Development
+**Copy SSH keys to local machine:**
+```bash
+# Private key (copy from remote host output above)
+cat > ~/.ssh/jupyterlab-admin << 'EOF'
+[PASTE PRIVATE KEY FROM REMOTE HOST]
+EOF
 
-1. **Install Remote-SSH extension**
-2. **Add SSH Host**:
-   - Press `F1` → "Remote-SSH: Open SSH Configuration File"
-   - Add this configuration:
-   ```
-   Host jupyterlab-admin
-       HostName localhost
-       Port 2222
-       User jovyan
-       IdentityFile /path/to/your/project/.ssh/jupyterlab-admin
-   ```
-3. **Connect**: `F1` → "Remote-SSH: Connect to Host" → Select "jupyterlab-admin"
+# Set permissions
+chmod 600 ~/.ssh/jupyterlab-admin
+```
+
+**Connect with single command:**
+```bash
+ssh jupyterlab-admin  # Direct connection - no multiple terminals!
+```
+
+### Cursor IDE Setup
+
+1. **Remote-SSH: Connect to Host**
+2. **Select**: `jupyterlab-admin` 
+3. **Working directory**: `/home/jovyan/project`
 
 ## Access Points
 
