@@ -94,22 +94,6 @@ COPY --chown=${NB_UID}:${NB_GID} bash_profile_admin /home/${NB_USER}/.bash_profi
 # Install python packages using uv (will use system Python due to ENV var)
 RUN uv pip install -r requirements.txt
 
-# Install additional development packages for admin environment
-RUN uv pip install \
-    # Code quality and debugging
-    pytest \
-    pytest-cov \
-    pylint \
-    mypy \
-    # System monitoring and debugging
-    psutil \
-    # Database tools
-    sqlalchemy \
-    # Additional scientific packages
-    scipy \
-    networkx \
-    plotly
-
 # Expose SSH port
 EXPOSE 22
 # Expose Jupyter port  
