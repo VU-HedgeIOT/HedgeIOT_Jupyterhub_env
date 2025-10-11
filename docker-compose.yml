@@ -41,7 +41,7 @@ services:
     ports:
       - "${KNOWLEDGE_ENGINE_PORT}:8280"
     environment:
-      KE_RUNTIME_PORT: 8081
+      KE_RUNTIME_PORT: 8082
       KE_RUNTIME_EXPOSED_URL: ${KE_RUNTIME_EXPOSED_URL}
       KD_URL: ${KD_URL}
     restart: on-failure
