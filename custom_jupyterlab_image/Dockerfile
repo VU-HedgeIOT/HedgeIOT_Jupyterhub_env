@@ -46,7 +46,7 @@ RUN update-alternatives --install /usr/bin/nano nano /bin/nano-tiny 10
 USER ${NB_UID}
 
 # Copy requirements file for better Docker layer caching
-COPY --chown=${NB_UID}:${NB_GID} requirements.txt .
+COPY --chown=${NB_UID}:${NB_GID} custom_jupyterlab_image/requirements.txt .
 
 # Install python packages using uv (will use system Python due to ENV var)
 RUN uv pip install -r requirements.txt
