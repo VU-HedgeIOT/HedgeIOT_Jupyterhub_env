@@ -65,3 +65,6 @@ KE_URL=http://${HOST_IP}/knowledge-engine/rest
 KE_USER=
 KE_PASS=
 ```
+
+
+For any questions please contact r.m.siebes'@'vu.nl
